@@ -1,0 +1,123 @@
+/*const ARRAY = ['Home','Products','Services','About'];
+export default class App extends Component
+{
+  constructor(props) {
+    super(props);
+    this.state = {
+      arrayState: ARRAY,
+    };
+  }
+  render(){
+    return(
+        <View style={style.container}>
+          <View style={style.head}>
+            <Text style={style.headText}>Welcom to React Natvie</Text>
+          </View>
+          <View style={style.body}>
+          <View style={style.menucontainer}>
+          <View style={style.menu}> 
+            {this.state.arrayState.map((data,index)=>{
+              return <ListItem key={index} name={data}
+              onClick ={()=>{
+                ARRAY[index]=ARRAY[index] + 1;
+                this.setState({
+                  arrayState: ARRAY,
+                })
+          }} />;
+            })}
+            </View>
+            <View style={style.content}>
+            </View>
+            
+            </View>
+            
+          </View>
+          <View style={style.footer}>
+            <Text style={style.footerText}>Footer</Text>
+          </View>
+        </View>
+
+
+
+    );
+  }
+}
+class ListItem extends PureComponent {
+  render(){
+    return(
+      <View>
+        
+          <CustomeButton title={this.props.name}
+          onPress={()=>this.props.onClick()}
+           />
+      </View>
+      )
+  }
+}
+
+const CustomeButton = (props) => {
+  return (
+      <TouchableOpacity 
+        onPress = {()=> props.onPress()}
+        style={{backgroundColor:'red',borderRadius:10}}>
+        <Text style = {{color:'white',padding:10}}>{props.title}</Text>
+      </TouchableOpacity>
+
+    )
+}
+const style=StyleSheet.create({
+  container:{
+    flex:1,
+  },
+  head: {
+    flex: 1,
+    justifyContent:'center',
+    backgroundColor:'blue',
+  },
+  body:{
+    flex:10,
+    backgroundColor:'grey',
+  },
+  footer:{
+    flex:0.7,
+    backgroundColor:'grey',
+  },
+  headText:{
+    fontSize:20,
+    fontWeight:'bold',
+    color:'white',
+    textAlign:'center',
+  },
+  menucontainer:{
+    flex:1,
+    flexDirection:'row',
+  },
+  menu: {
+    flex:1,
+    backgroundColor:'blue',
+  },
+  content: {
+    flex:3,
+    backgroundColor: 'yellow',
+  },
+  footerText:{
+    fontSize: 15,
+    textAlign:'center',
+    paddingTop: '2%',
+  }
+})
+*/
+
+//Usage of touchable opacity for custome buttons--------------------------------------------------------------
+/*export default class App extends Component
+{
+  render(){
+    return(
+        <TouchableOpacity style={{backgroundColor:'green',width:'20%',borderRadius:5}}
+        onPress={()=>{alert('hai')}}>
+          <Text style = {{color:'red',padding:11}} >Home</Text>
+        </TouchableOpacity>
+
+      )
+  }
+}*/

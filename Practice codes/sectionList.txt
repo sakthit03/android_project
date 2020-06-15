@@ -1,0 +1,77 @@
+import React, {Component,PureComponent} from 'react';
+import {SectionList,StyleSheet,View,Text,Button} from 'react-native';
+const list = [
+                      {
+                        title : 'Title 1',
+                        data : ['content1','content2','content13'], 
+                      },
+                      {
+                        title : 'Title 1',
+                        data : ['content1','content2','content13'], 
+                      },
+                      {
+                        title : 'Title 1',
+                        data : ['content1','content2','content13'], 
+                      },
+                      {
+                        title : 'Title 1',
+                        data : ['content1','content2','content13'], 
+                      },
+                      {
+                        title : 'Title 1',
+                        data : ['content1','content2','content13'], 
+                      },
+                      {
+                        title : 'Title 1',
+                        data : ['content1','content2','content13'], 
+                      },
+
+                      ];
+
+export default class App extends Component{
+render(){
+ return(
+      <View>
+        <SectionList 
+          sections = {list}
+          renderItem = {({item})=><SectionListButton item = {item}
+           click={()=>{
+                  alert(item);
+                }}
+          />}
+          renderSectionHeader = {({section}) => (<Text style={style.title}>{section.title}</Text>)}
+          keyExtractor = {(item,index)=>index}
+          
+        />
+
+
+      </View>
+
+    );
+  }
+}
+class SectionListButton extends Component
+{
+  render(){
+    return(
+
+              <Text style = {style.items} 
+              onPress = {this.props.click}>{this.props.item}</Text>
+
+          )
+  }
+}
+const style = StyleSheet.create({
+  title: {
+    margin:3,
+    padding:5,
+    fontSize:20,
+    backgroundColor:'green',
+  },
+  items: {
+    margin:1,
+    padding:3,
+    paddingLeft:100,
+    backgroundColor:'yellow',
+  }
+})

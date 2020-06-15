@@ -1,0 +1,23 @@
+import React, {Component,PureComponent} from 'react';
+import {ActivityIndicator,View,Button} from 'react-native';
+
+
+
+export default class App extends Component{
+
+render(){
+    return(
+        <View style={{marginTop: '80%'}}> 
+          <ActivityIndicator
+          animating = {true}
+          size={50} 
+          color='#ff0000'
+          />
+
+         
+        </View>  
+
+      )
+  }  
+
+}

@@ -1,0 +1,83 @@
+import React, {Component} from 'react';
+import {Alert,View,Text,TouchableOpacity,StyleSheet,PermissionsAndroid} from 'react-native';
+import Geolocation from 'react-native-geolocation-service';
+
+
+export default class App extends Component {
+constructor(props) {
+  super(props);
+  //this.getlocation = this.getlocation.bind(this);
+  this.state ={
+    location:'click find my location button to see your location.',
+    alertcount: 0,
+
+};
+}
+componentDidMount()
+{
+    
+        this.watchID=Geolocation.watchPosition(
+            (position)=>{
+
+                const pos = JSON.stringify(position);
+                this.setState({location:pos});
+                this.setState({alertcount:this.state.alertcount+1})
+                alert(this.state.alertcount);
+            },
+            error => Alert.alert(error.message),
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+
+
+            );
+   
+}
+componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+/*async getlocation(){
+
+   const checkLoactionPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+    
+    if(checkLoactionPermission === PermissionsAndroid.RESULTS.GRANTED)
+    {
+        Geolocation.getCurrentPosition(
+            (position)=>{
+                const pos = JSON.stringify(position);
+                this.setState({location:pos});
+            },
+            (error) => { console.log(error); },
+      { enableHighAccuracy: true, timeout: 1000 }
+        );
+    }
+    else{
+        alert('Please click allow to check your loaction');
+    }    
+
+}*/
+
+
+
+    render(){
+        return(
+            <View>
+                <TouchableOpacity style = {{width:'40%',marginLeft:'30%',marginTop:'40%'}}
+                    onPress = {this.getlocation}>
+                    <Text style = {style.btn}>Find my Location</Text>
+
+                </TouchableOpacity>
+                <Text> position : {this.state.location} </Text>
+            </View>
+
+
+        )
+    }
+}
+const style = StyleSheet.create({
+    btn : {
+        padding:10,
+        backgroundColor:'blue',
+        textAlign : 'center',
+        color:'white'
+    }
+})

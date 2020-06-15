@@ -1,0 +1,6 @@
+image slider for more details  https://github.com/phil-r/react-native-looped-carousel
+
+
+for free icons https://www.flaticon.com
+
+qrcode  https://blog.hackajob.co/how-to-build-a-qrcode-reader-using-reactnative/

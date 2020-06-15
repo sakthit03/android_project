@@ -1,0 +1,186 @@
+import React, {useEffect,Component} from 'react';
+import { View,
+		 Text,Button,
+		 TouchableWithoutFeedback,
+		 StyleSheet,
+		 BackHandler,
+		 Alert,
+		 
+		  } from 'react-native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+
+function Home({navigation}) {
+return(
+	<View style = {style.container}>
+		
+	<View style = {style.menuContain}>
+
+		<View style = {style.headContainer}> 
+		<View style = {style.menuBtn}>
+			
+		<TouchableWithoutFeedback
+		onPress = {()=>{navigation.openDrawer();}} >
+			<Text
+				style = {{
+					fontSize:20,
+					color:'black',
+					backgroundColor:'rgba(0,0,0,0.1)',
+					padding:6,
+					width:37,
+					margin:10,
+					borderRadius:4,
+				}}>| | |</Text>
+		</TouchableWithoutFeedback>
+		</View>
+		<View style = {style.menuHead}>
+			<Text style = {style.menuHeadText}>Company Name</Text>
+		</View>
+		</View>
+		</View>
+		<View style = {style.content}>
+			<Text style = {{padding:'10%'}}> This is home screen  </Text>
+			<Button title = 'goto settings'
+				onPress = {()=>{navigation.navigate('Settings')}}
+			/>
+		</View>
+	</View>
+)
+}
+function Settings({navigation}) {
+useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Hold on!", "Are you sure you want to go back?", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+        },
+        { text: "YES", 
+        //onPress: () => BackHandler.exitApp() //for close the app
+        onPress: () => navigation.goBack() //for to back in stack
+    	}
+      ]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener("hardwareBackPress",backAction);
+
+    return () => backHandler.remove();
+  }, []);
+
+  return (
+    <View >
+      <Text >Click Back button!</Text>
+    </View>
+  );
+
+}
+
+
+function ProductsScreen({navigation}) {
+return(
+	<View style = {style.container}>
+		
+	<View style = {style.menuContain}>
+
+		<View style = {style.headContainer}> 
+		<View style = {style.menuBtn}>
+			
+		<TouchableWithoutFeedback
+		onPress = {()=>{navigation.openDrawer();}} >
+			<Text
+				style = {{
+					fontSize:20,
+					color:'black',
+					backgroundColor:'rgba(0,0,0,0.1)',
+					padding:6,
+					width:37,
+					margin:10,
+					borderRadius:4,
+				}}>| | |</Text>
+		</TouchableWithoutFeedback>
+		</View>
+		<View style = {style.menuHead}>
+			<Text style = {style.menuHeadText}>Company Name</Text>
+		</View>
+		</View>
+		</View>
+		<View style = {style.content}>
+			<Text style = {{padding:'10%'}}> This is Products screen  </Text>
+		</View>
+	</View>
+)
+}
+
+const style = StyleSheet.create({
+	container: {
+		flex:1,
+
+	},
+	menuContain :{
+		flex:1,
+		borderBottomWidth:1,
+		borderBottomColor:'black',
+	},
+	content : {
+		flex:11,
+		
+	},
+	headContainer : {
+		flex:1,
+		flexDirection:'row',
+		
+	},
+	menuBtn : {
+		flex:1,
+		
+	},
+	menuHead : {
+		flex:5,
+
+	},
+	menuHeadText :{
+		color:'red',
+		textAlign:'right',
+		padding:'5%',
+		fontSize:20,
+		fontWeight:'bold',
+	}
+})
+
+
+
+
+
+
+
+const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
+
+function HomeScreen(){
+return(
+	<Stack.Navigator screenOptions={{
+    headerShown: false
+  }}>
+		<Stack.Screen name = 'Home' component ={Home} />
+		<Stack.Screen name = 'Settings' component ={Settings} />
+
+	</Stack.Navigator>
+)
+}
+
+export default function App () {
+return(
+	<NavigationContainer>
+		<Drawer.Navigator>
+			<Drawer.Screen name = 'HomeScreen' component = {HomeScreen} />
+
+			<Drawer.Screen name = 'Products' component = {ProductsScreen} />
+
+		</Drawer.Navigator>
+
+	</NavigationContainer>
+
+)
+}

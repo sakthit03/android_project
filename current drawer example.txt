@@ -1,0 +1,66 @@
+import React, {Component} from 'react';
+import {View,
+    Text,
+    TextInput,
+    Button,
+    StyleSheet,
+    TouchableOpacity,
+    Alert,
+    Image,
+
+      } from 'react-native';
+
+import AsyncStorage from '@react-native-community/async-storage';
+import { NavigationContainer,DrawerActions } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+
+
+
+function Home({navigation}){
+  return(
+    <View><Text>THis is home</Text>
+      <Button title='open Drawer' 
+      onPress={()=>{navigation.openDrawer()}}
+
+      />
+    </View>
+
+  )
+}
+function Products({navigation}){
+  return(
+    <View><Text>THis is Products</Text>
+      <Button title='open Drawer' 
+      onPress={()=>{navigation.openDrawer()}}
+
+      />
+    </View>
+
+  )
+}
+
+const Drawer = createDrawerNavigator();
+const Tab = createBottomTabNavigator();
+
+function RootTab(){
+  return(
+    <Tab.Navigator>
+      <Tab.Screen name='Home' component={Home} />
+      <Tab.Screen name='Products' component={Products} />
+    </Tab.Navigator>
+  )
+}
+
+export default function App () {
+  return(
+    <NavigationContainer>
+      <Drawer.Navigator>
+        <Drawer.Screen name='RootTab' component={RootTab} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  )
+}
+

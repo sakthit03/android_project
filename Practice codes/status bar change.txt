@@ -1,0 +1,44 @@
+import React, {Component,PureComponent} from 'react';
+import {Picker,View,Button,Text,StatusBar} from 'react-native';
+
+
+
+export default class App extends Component{
+constructor(props) {
+  super(props);
+
+  this.state = {
+    language:'JAVA',
+    itemPosition: 0,
+  };
+}
+
+render(){
+    return(
+        <View>
+        <StatusBar 
+          backgroundColor = 'rgba(0,0,200,0.3)'
+          barStyle = 'dark-content'
+          
+          showHideTransition = 'fade'
+        /> 
+         
+        <Text>Picker Example</Text>
+          <Picker
+            style ={{width:100}}
+            selectedValue = {this.state.language}
+            onValueChange={(itmeValue,itemPosition)=>this.setState({language : itmeValue,itemPosition:itemPosition})}
+            mode ="dialogue" //or "dropdown" 
+            prompt ='Choose the language' //to display the title of the dialogue
+          >
+          <Picker.Item label='JAVA' value='JAVA'/>
+          <Picker.Item label='CPP' value='CPP'/>
+          <Picker.Item label='PHP' value='PHP'/>
+          </Picker>
+          <Text>Position : {this.state.itemPosition+1}</Text>
+        </View> 
+
+      )
+  }  
+
+}

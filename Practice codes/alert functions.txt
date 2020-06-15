@@ -1,0 +1,46 @@
+import React, { Component } from 'react';  
+import { Alert, AppRegistry, Button, StyleSheet, View } from 'react-native';  
+  
+export default class App extends Component {
+constructor(props) {
+  super(props);
+
+  this.state = {
+    alertstatus:'',
+  };
+}
+click(){
+    Alert.alert(
+        'Confirm Delete',
+        'Do you really want to Delete?',
+        [
+        {text:'Ask me later',
+            onPress:()=>{alert('later')},
+            style:{color:'green'}
+            },
+        {text:'No',
+            onPress:()=>{alert('canceled')}},
+        {text:'Yes',
+            onPress:()=>{alert('Deleted')}}
+        ]
+        );
+}  
+    render() {  
+        return (  
+            <View style={styles.container}>  
+                <Button 
+                title='click me'
+                onPress={this.click}
+                />     
+            </View>  
+        );  
+    }  
+}  
+  
+const styles = StyleSheet.create({  
+    container: {  
+        flex: 1,  
+        justifyContent: 'center',
+    }
+     
+})  

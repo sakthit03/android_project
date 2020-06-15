@@ -1,0 +1,47 @@
+import React, {Component,PureComponent} from 'react';
+import {StyleSheet,Text,TextInput,View,Button} from 'react-native';
+
+var name = '';
+export default class App extends Component{
+constructor(props) {
+  super(props);
+
+  this.state = {
+    name:'',
+   };
+  }
+  updateFiled = fieldName => text =>{
+    this.setState({
+      [fieldName] : text,
+    })
+  }
+  render(){
+    return(
+
+          <View style = {style.input}>
+            <Text>Text = {this.state.text}</Text>
+            <TextInput style={style.textinput}
+            placeholder = 'Enter here..'
+
+            onChangeText = {this.updateFiled("name")}
+            />
+            <Button title = 'Show Input'
+              onPress = {()=>{alert(this.state.name)}}
+            />
+          
+          </View>
+
+        );
+  }
+}
+const style = StyleSheet.create({
+  input : {
+    backgroundColor:'yellow',
+  },
+  textinput : {
+    margin:10,
+    padding:10,
+    fontSize:20,
+    backgroundColor:'lightblue',
+  }
+})

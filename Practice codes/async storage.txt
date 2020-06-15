@@ -1,0 +1,78 @@
+import React, {Component} from 'react';
+import {View,Text,TextInput,Button} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
+
+export default class App extends Component<Props>{
+constructor(props) {
+  super(props);
+
+  this.state = {
+  	name:'',
+  };
+}
+async setUser(){
+	//let name = this.state.name; for single input from user inputs-------->
+	let userobj = {name:'sakthivel',age:24,city:'Trichy'}
+	let userjson = JSON.stringify(userobj);
+	await AsyncStorage.setItem('user',userjson);
+}
+async getUser(){
+try{
+	let nname = await AsyncStorage.getItem('user');
+	let userinfo = JSON.parse(nname);
+	alert(nname);
+}catch(error){
+	alert(error);
+}
+}
+async delUser() {
+	await AsyncStorage.removeItem('user')
+	//let keys = await AsyncStorage.getAllKeys(); //to get alll keys from app storage
+	alert(keys[0]);
+}
+render(){
+	return(
+		<View>
+			<Text
+			style = {{
+				margin:90,
+				fontSize:29,
+			}} >AsyncStorage</Text>
+			<TextInput
+			placeholder='Please enter the name...'
+			onChangeText={(text)=>this.setState({name:text})}
+			style = {{
+				fontSize:15,
+				color:'black',
+				fontWeight:'bold',
+				borderWidth:1,
+				borderColor:'black',
+				width:'50%',
+				borderRadius:10,
+				margin:10,
+				height:40,
+				backgroundColor:'rgba(0,0,0,0.1)',
+			}} />
+			<Button 
+				title='set the name'
+				onPress={()=>{this.setUser()}}
+				/>
+			<View style = {{marginTop:40}} >
+			<Button 
+				title='get the name'
+				onPress={()=>{this.getUser()}}
+				/>
+			</View>	
+			<View style = {{marginTop:40}} >
+			<Button 
+				title='Delete Use Infor'
+				onPress={()=>{this.delUser()}}
+				/>
+			</View>
+
+		</View>
+
+	)
+}
+}

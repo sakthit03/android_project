@@ -1,0 +1,174 @@
+import * as React from 'react';
+import { View,Text,Button } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+function IconWithBadge({ name, profileBadge, color, size }) {
+  return (
+    <View style={{ width: 20, height: 20, margin: 5 }}>
+      <Icon name={name} size={size} color={color} />
+      {profileBadge > 0 && (
+        <View
+          style={{
+            // On React Native < 0.57 overflow outside of parent will not work on Android, see https://git.io/fhLJ8
+            position: 'absolute',
+            right: -6,
+            top: -3,
+            backgroundColor: 'red',
+            borderRadius: 6,
+            width: 12,
+            height: 12,
+            paddingRight:1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}>
+            {profileBadge}
+          </Text>
+        </View>
+      )}
+      {profileBadge > 9 && (
+        <View
+          style={{
+            // On React Native < 0.57 overflow outside of parent will not work on Android, see https://git.io/fhLJ8
+            position: 'absolute',
+            right: -6,
+            top: -3,
+            backgroundColor: 'red',
+            borderRadius: 8,
+            width: 14,
+            height: 14,
+            padding:1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}>
+            {'9+'}
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+}
+function Profile(props) {
+  // You should pass down the badgeCount in some other ways like React Context API, Redux, MobX or event emitters.
+  return <IconWithBadge {...props} profileBadge={10} />;
+}
+function Home({navigation}) {
+return(
+	<View>
+	<Text>This is Home page</Text> 
+	
+	</View>
+)
+}
+
+function Login({ navigation }) {
+return(
+	<View>
+		<Text>Login Page</Text>
+		<Button 
+		title='Click to Logout'
+		onPress = {()=>{navigation.navigate('MyModal')}} />
+
+	</View>
+)
+}
+
+function Logout() {
+return(
+	<View>
+		<Text>Logout Page</Text>
+
+	</View>
+)
+}
+
+function Settings({navigation}) {
+return(
+	<View>
+		<Text>Settings screen</Text>
+		
+	</View>
+)
+}
+
+
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+
+function ProfileScreen(){
+return(
+	<Stack.Navigator>
+		<Stack.Screen name='Login' component = {Login} />
+		<Stack.Screen name='Logout' component = {Logout} />
+	</Stack.Navigator>
+)
+}
+
+
+function App() {
+return (
+	<NavigationContainer>
+		<Tab.Navigator
+		mode="modal" headerMode="none"
+		screenOptions = {({route}) => ({
+			tabBarIcon : ({ focused, color, size})=> {
+				let iconName;
+
+				if(route.name === 'Home')
+				{
+					iconName = 'home';
+				}
+				else if(route.name === 'Profile')
+				{
+					return(
+						<Profile 
+						name = 'user'
+						size = {size}
+						/>
+					)
+				}
+				else if(route.name === 'Settings')
+				{
+					iconName = 'cog';
+				}
+				return <Icon name={iconName} size={size} color={color} />;
+			},
+		})}
+		tabBarOptions = {{
+			activeTintColor: 'tomato',
+			activeBackgroundColor:'rgba(0,0,0,0.2)',
+			inactiveTintColor : 'black'
+		}}
+		>
+			<Tab.Screen 
+				name='Home'
+				component={Home} 
+			/>
+			
+
+			<Tab.Screen 
+				name='Profile' 
+				component={ProfileScreen}
+
+			/>
+
+			<Tab.Screen 
+				name = 'Settings'
+				component = {Settings}
+
+			/>
+		</Tab.Navigator>
+	</NavigationContainer>	
+
+)
+}
+
+
+export default App;

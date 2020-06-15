@@ -1,0 +1,521 @@
+import React, {Component} from 'react';
+import {View,
+    Text,
+    TextInput,
+    Button,
+    StyleSheet,
+    TouchableOpacity,
+    Alert,
+    Image,
+
+      } from 'react-native';
+
+import AsyncStorage from '@react-native-community/async-storage';
+import { NavigationContainer,DrawerActions } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+
+//SignIn or login screen-------------------------------------------->
+class SignInScreen extends Component {
+constructor(props) {
+  super(props);
+
+  this.checkUser = this.checkUser.bind(this);
+
+  this.state = {
+    email:'',
+    pwd:'',
+    loginErr:'',
+  };
+}
+async checkUser(){
+
+  const {navigation} = this.props;
+
+let email = this.state.email;
+let pwd = this.state.pwd;
+
+if( email.length == 0 || pwd.length == 0 ){
+  this.setState({loginErr:'Please enter the user name and pawword!'});
+  return 0;
+}else{
+  let userjson = await AsyncStorage.getItem('user');
+  let user = JSON.parse(userjson);
+
+  if(user.email != email || user.pwd != pwd )
+  {
+    this.setState({loginErr:'Invalid email and password.'});
+    return 0;
+  }else{
+    navigation.navigate('Root');    
+  }
+}
+}
+render(){
+const {navigation} = this.props;
+  return(
+    <View style={{flex:1,backgroundColor:'white'}} >
+      <Image
+        style = {{
+              marginTop:10,
+              width:100,
+              height:100,
+              alignSelf:'center',
+              }}
+        source={require('./assets/img/yaa_icon.png')}
+        />
+      <Text style ={{textAlign:'center',fontSize:30,marginTop:10,}} >Login</Text>
+
+      <Text style ={{marginLeft:'10%',marginTop:5,color:'red'}} >{this.state.loginErr}</Text>
+      
+
+      <TextInput style = {style.signinIn} placeholder = {'Email...'}
+        onChangeText = {(email)=>{this.setState({ email })}} />
+
+      <TextInput secureTextEntry={true} style = {style.signinIn} placeholder = {'Password...'} 
+        onChangeText = {(pwd)=>{this.setState({ pwd })}} />
+
+      <TouchableOpacity style = {style.forgot}
+        onPress = {()=>{navigation.navigate('ForgotPwd')}}
+        >
+        
+        <Text style = {style.btnForgot} >Forgot password?</Text>
+
+      </TouchableOpacity>
+
+
+    <TouchableOpacity style = {signin.signinOpacity}
+    onPress = {()=>{this.checkUser()}}>
+
+        <Text style = {signin.signinTxt} >SignIn</Text>
+
+    </TouchableOpacity>
+    
+    <TouchableOpacity style = {style.signup}
+      onPress = {()=>{navigation.navigate('SignUp')}} >
+
+      <Text style = {style.btnReg} >New user? Register Here...</Text>
+    </TouchableOpacity>
+
+    </View>
+  )
+}
+}
+const signin = StyleSheet.create({
+  signinOpacity:{
+    marginTop:10,
+    marginLeft:'10%',
+    backgroundColor:'blue',
+    width:'80%',
+    marginBottom:10,
+  },
+  signinTxt:{
+    fontSize:15,
+    color:'white',
+    textAlign:'center',
+    margin:10,
+  }
+})
+
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//SignUp or register screen----------------------------------------->
+
+class SignUp extends Component{
+constructor(props) {
+  super(props);
+
+this.onClickSignUp = this.onClickSignUp.bind(this);
+
+
+  this.state = {
+    FName  : '',
+    LName  : '',
+    email  : '',
+    mobile : '',
+    pwd    : '',
+    cpwd   : '',
+    regErr : '',
+  };
+}
+//----------------------------------------------------------------------------------------------
+// for register and store in async storage
+
+async onClickSignUp() {
+const {navigation} = this.props;
+
+
+let F_name = this.state.FName;
+let L_name = this.state.LName;
+let mobile = this.state.mobile;
+let email = this.state.email.toLowerCase();
+let pwd = this.state.pwd;
+let cpwd = this.state.cpwd;
+
+if( F_name.length == 0 || L_name.length == 0  || email.length == 0 || mobile.length == 0 || pwd.length == 0 || cpwd.length == 0)
+{
+  this.setState({regErr:'Please fill the all input fields.'});
+  return 0;
+}else{
+  //email validate --------------------------------------------->
+  var re = /[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm; //regular expression for email validate-->
+  if(!re.test(email))
+  {
+    this.setState({regErr:'Please enter a valid email!.'});
+    return 0;
+  }
+  //password matching   ----------------------------------->
+  if(pwd != cpwd)
+  {
+    this.setState({loginErr:'Password does not mathced'});
+    return 0;
+  }
+  else{
+    let userObj = {
+      F_name:F_name,
+      L_name:L_name,
+      email:email,
+      mobile:mobile,
+      pwd:pwd,
+    }
+    let userjson = JSON.stringify(userObj);
+  
+    await AsyncStorage.setItem('user',userjson);
+    let userst = await AsyncStorage.getItem('user');
+    this.setState({regErr:'Registration Success'});
+  }
+  
+}
+}
+
+resetInputs(){
+  this.setState({
+    FName  : '',
+      LName  : '',
+      email  : '',
+      mobile : '',
+      pwd    : '',
+      cpwd   : '',
+      regErr : '',
+  })
+}
+//---------------------------------------------------------------------------------------------
+
+render(){
+  const {navigation} = this.props;
+return(
+  <View style = {{flex:1}} >
+    <Text style ={{textAlign:'center',margin:'3%',fontSize:30}}>Register</Text>
+
+    <Text style = {{marginLeft:'10%',color:'red' ,}} >{this.state.regErr}</Text>
+
+    <TextInput placeholder = {'First Name...'} style = {style.signUpIn}
+      onChangeText = { (FName)=>{this.setState({ FName })} } value = {this.state.FName} />
+
+    <TextInput placeholder = {'Last Name...'} style = {style.signUpIn}
+      onChangeText = { (LName)=>{this.setState({ LName })} } value = {this.state.LName} />
+
+    <TextInput placeholder = {'Email...'} style = {style.signUpIn}
+      onChangeText = { (email)=>{this.setState({ email })} } value = {this.state.email} />
+
+    <TextInput placeholder = {'Mobile...'} style = {style.signUpIn}
+      onChangeText = { (mobile)=>{this.setState({ mobile })} } value = {this.state.mobile} />
+
+    <TextInput  secureTextEntry={true} placeholder = {'Password...'} style = {style.signUpIn}
+      onChangeText = { (pwd)=>{this.setState({ pwd })} } value = {this.state.pwd} />
+
+    <TextInput  secureTextEntry={true} placeholder = {'Confirm Password...'} style = {style.signUpIn} 
+      onChangeText = { (cpwd)=>{this.setState({ cpwd })} } value = {this.state.cpwd} />
+
+    <TouchableOpacity
+      onPress = {this.onClickSignUp}
+      style = {style.regOpacity}
+    >
+      <Text style = {style.regTxt}>Register</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity style = {style.resetOpacity}
+      onPress = {()=>{this.resetInputs()}} >
+      <Text style = {style.resetTxt}>Reset</Text> 
+    </TouchableOpacity>
+
+    <TouchableOpacity style = {style.signRegOpacity}
+      onPress = {()=>navigation.goBack()} >
+      <Text style = {style.signRegTxt}>SignIn</Text>  
+    </TouchableOpacity>
+
+
+  </View>
+)
+}
+}
+
+const style = StyleSheet.create({
+  resetOpacity: {
+    width:'30%',
+    textAlign:'center',
+    marginTop:'-10%',
+    marginLeft:'60%',
+    backgroundColor:'red',
+    padding:10,
+  },
+  resetTxt: {
+    fontSize:15,
+    textAlign:'center',
+    color:'white',
+  },
+  signRegOpacity: {
+    marginLeft:'10%',
+    marginTop:'5%',
+    width:'80%',  
+  },
+  signRegTxt:{
+    padding:10,
+    backgroundColor:'green',
+    fontSize:15,
+    textAlign:'center',
+    color:'white',
+  },
+  regTxt: {
+    fontSize:15,
+    textAlign:'center',
+    color:'white',
+  },
+  signUpIn : {
+    borderWidth:1,
+    borderColor:'black',
+    width:'80%',
+    alignSelf:'center',
+    marginTop:'2%',
+    borderColor:'#ccc',
+    height:40,
+    padding:10,
+    fontSize:18,
+    fontWeight:'bold',
+
+  },
+  signinIn: {
+    borderWidth:1,
+    borderColor:'black',
+    width:'80%',
+    alignSelf:'center',
+    marginTop:'2%',
+    height:40,
+    padding:10,
+    borderColor:'#ccc',
+    fontSize:18,
+    fontWeight:'bold',
+  },
+  regOpacity: {
+    width:'30%',
+    textAlign:'center',
+    marginTop:'5%',
+    marginLeft:'10%',
+    backgroundColor:'blue',
+    padding:10,
+  },
+
+  btnReg:{
+    textAlign:'center',
+    color:'blue',
+  },
+  btnForgot:{
+    textAlign:'left',
+    color:'blue',
+  },
+  forgot:{
+    marginTop:'2%',
+    marginLeft:'10%',
+  }
+
+})
+
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+//forgot password screen--->
+
+class ForgotPwd extends Component{
+constructor(props) {
+  super(props);
+
+  this.state = {};
+}
+
+render(){
+
+  return(
+      <View style={{flex:1}}>
+        <Text style = {{fontSize:20,textAlign:'center',marginTop:'5%'}} >Forgot Password</Text>
+
+      <TextInput placeholder={'Email...'} style = {style.signUpIn} />
+      
+      <TouchableOpacity style={style.signRegOpacity}>
+        <Text style={style.signRegTxt}>Reset</Text>
+      </TouchableOpacity>
+
+      </View>
+
+  )
+}
+}
+
+class Home extends Component{
+constructor(props) {
+  super(props);
+
+  this.state = {
+    plusMenu:'0deg',
+    plusMenuFlag:false,
+    plusMenuColor:'green',
+  };
+}
+
+
+render(){
+const navigation = this.props;
+  return(
+    <View style={{flex:1}}>
+      
+      <Text>This is home page</Text>
+      <Button title='open'
+      onPress={()=>{navigation.dispatch(DrawerActions.toggleDrawer())}}
+        
+        />
+    </View>
+)
+}
+}
+
+
+class Shop extends Component{
+constructor(props) {
+  super(props);
+
+  this.state = {};
+}
+
+render(){
+
+  return(
+    <View>
+      <Text>This is Shop page</Text>
+    </View>
+)
+}
+}
+class Orders extends Component{
+constructor(props) {
+  super(props);
+
+  this.state = {};
+}
+
+render(){
+
+  return(
+    <View>
+      <Text>This is Orders page</Text>
+    </View>
+)
+}
+}
+function Terms(){
+return (
+  <View>
+      <Text>This is Orders page</Text>
+  </View>
+)
+
+}
+
+// navigation screen here------------------------------>
+
+const Stack = createStackNavigator();
+
+const Tab = createBottomTabNavigator();
+
+const Drawer = createDrawerNavigator();
+
+function RootDrawer() {
+  return (
+    <Drawer.Navigator drawerContent={props => <CustomDrawerContent {...props} />}>
+      <Drawer.Screen name="Terms" component={Terms} />
+    </Drawer.Navigator>
+  );
+}
+
+function RootTab(){
+return(
+  <Tab.Navigator
+    
+    tabBarOptions={{
+      activeTintColor:'green', 
+      inactiveTintColor:'black',
+      style:{
+        backgroundColor:'#ccc',
+      }
+    }}
+    >
+    
+
+    <Tab.Screen name='Home' component={Home}
+    options={{
+      tabBarIcon:({color})=>(<Icon name='home' color={color} size={24} />),
+    }} />
+    
+
+    <Tab.Screen name='Shop' component={Shop}
+    options={{
+      tabBarIcon:({color})=>(<Icon name='shopping-bag' color={color} size={22} />),
+    }} />
+    
+
+    <Tab.Screen name='Orders' component={Orders}
+    options={{
+      tabBarIcon:({color})=>(<Icon name='shopping-cart' color={color} size={24} />),
+    }} />
+      
+  </Tab.Navigator>
+)
+}
+const plusMenuS =  StyleSheet.create({
+  btnView:{
+    position:'absolute',
+    top:-15,
+    justifyContent:'center',
+    alignItems:'center',
+
+  },
+  btnText:{
+    
+    color:'white',
+    fontSize:40,
+  }
+})
+
+
+
+export default function App (){
+return(
+  <NavigationContainer>
+
+    <Stack.Navigator headerMode='none' initialRouteName='RootTab'>
+      <Stack.Screen name='SignInScreen' component = {SignInScreen} />
+      <Stack.Screen name='SignUp' component = {SignUp} />
+      <Stack.Screen name='ForgotPwd' component = {ForgotPwd} />
+      <Stack.Screen name='RootTab' component = {RootTab} />
+      <Drawer.Screen name='Terms' component={Terms} />
+    </Stack.Navigator>
+  </NavigationContainer>
+
+)
+}
